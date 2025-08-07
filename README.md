@@ -71,7 +71,7 @@ Setting up and running the entire application stack is streamlined with Docker C
 ### Clone the Repository
 
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/AbQaadir/node-micro-services.git
 cd node-micro
 ```
 
