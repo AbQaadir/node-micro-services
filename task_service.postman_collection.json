@@ -1,0 +1,73 @@
+{
+  "info": {
+    "_postman_id": "8b9c0d1e-2f3a-4b5c-6d7e-8f9a0b1c2d3e",
+    "name": "Task Service API",
+    "description": "A collection to test the standalone Task Service.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Check Service Status",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3002/",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3002",
+          "path": [""]
+        },
+        "description": "This request hits the root endpoint to confirm the task-service is running and responsive."
+      },
+      "response": []
+    },
+    {
+      "name": "2. Create a New Task",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"title\": \"Deploy the new feature\",\n    \"description\": \"Remember to update the environment variables in production.\",\n    \"userId\": \"user-12345\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3002/tasks",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3002",
+          "path": ["tasks"]
+        },
+        "description": "Sends a JSON payload to the /tasks endpoint to create a new task document."
+      },
+      "response": []
+    },
+    {
+      "name": "3. Get All Tasks",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3002/tasks",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3002",
+          "path": ["tasks"]
+        },
+        "description": "Retrieves a list of all tasks that have been created in the database."
+      },
+      "response": []
+    }
+  ]
+}

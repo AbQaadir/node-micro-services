@@ -1,0 +1,77 @@
+services:
+  # The Database Service
+  mongodb:
+    image: mongo:6.0
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: secret
+    volumes:
+      - mongo-data:/data/db
+    # Both services must be on the same network to communicate
+    networks:
+      - app-network
+
+  # The RabbitMQ Messaging Service
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"   # Port for the AMQP protocol
+      - "15672:15672" # Port for the RabbitMQ Management UI
+    networks:
+      - app-network
+
+  # The User Service
+  user-service:
+    build: ./user-service
+    container_name: node-app
+    restart: always
+    ports:
+      # Exposes port 3001 to your local machine so you can use Postman
+      - "3001:3001"
+    networks:
+      - app-network
+    # This ensures mongodb is started and healthy before your app starts
+    depends_on:
+      - mongodb
+
+  # The Task Service
+  task-service:
+    # This tells Docker to build an image from the Dockerfile in the './task-service' directory
+    build: ./task-service
+    container_name: task-app
+    restart: always
+    ports:
+      # Exposes port 3002, as defined in your new code
+      - "3002:3002"
+    networks:
+      - app-network
+    depends_on:
+      - mongodb
+      - rabbitmq
+  # The Notification Service (The Consumer)
+  notification-service:
+    build: ./notification-service
+    container_name: notification-app
+    restart: always
+    ports:
+      - "3003:3003"
+    networks:
+      - app-network
+    depends_on:
+      - rabbitmq
+
+# Defines the volume for persistent data
+volumes:
+  mongo-data:
+    driver: local
+
+# Defines the shared network for all services
+networks:
+  app-network:
+    driver: bridge
